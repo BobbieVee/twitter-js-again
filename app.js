@@ -2,18 +2,28 @@ const express = require('express');
 const app = express();
 const chalk = require('chalk');
 const volleyball = require('volleyball');
+const nunjucks = require('nunjucks');
+
+// let locals =  {
+// 	title: 'An Example',
+// 	people: [
+// 		{name: 'Gandolf'},
+// 		{name: 'Frodo'}, 
+// 		{name: 'Hermione'}
+// 	]
+// };
+
+const people = [{name: 'Full'}, {name: 'Stacker'}, {name: 'Son'}];
+
+
+app.set('view engine', 'html');
+app.engine('html', nunjucks.render);
+nunjucks.configure('views', {noCache: process.env.NOCACHE});
 
 app.use(volleyball);
 
-// app.use(function (req, res, next) {
-//   console.log(req.method,req.originalUrl);
-//   next();
-// })
-	
-
 app.get('/', (req, res, next) => {
-	res.send('hello world!');
-	next();
+	res.render('index', {title: 'Hall of Fame', people: people});
 });
 
 app.get('/news', (req, res, next) => {
