@@ -3,34 +3,17 @@ const app = express();
 const chalk = require('chalk');
 const volleyball = require('volleyball');
 const nunjucks = require('nunjucks');
+const routes = require('./routes');
 
-// let locals =  {
-// 	title: 'An Example',
-// 	people: [
-// 		{name: 'Gandolf'},
-// 		{name: 'Frodo'}, 
-// 		{name: 'Hermione'}
-// 	]
-// };
-
-const people = [{name: 'Full'}, {name: 'Stacker'}, {name: 'Son'}];
-
-
+app.use(express.static('public'));
 app.set('view engine', 'html');
 app.engine('html', nunjucks.render);
 nunjucks.configure('views', {noCache: process.env.NOCACHE});
 
 app.use(volleyball);
+app.use('/', routes);
 
-app.get('/', (req, res, next) => {
-	res.render('index', {title: 'Hall of Fame', people: people});
-});
 
-app.get('/news', (req, res, next) => {
-	console.log('newsy');
-	res.send('hello NEWS!');
-	next();
-});
 
 
 
