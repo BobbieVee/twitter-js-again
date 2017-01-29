@@ -1,9 +1,15 @@
 const  _ = require('lodash');
 
-const data = [];
+const data = []; 
 
 function add (name, content) {
-  data.push({ name: name, content: content });
+  let id = data.reduce(function(max, user){
+    max = user.id >= max?user.id+1: max;
+    return max;
+  }, 0);
+  
+  data.push({ id: id, name: name, content: content });
+  return id;
 }
 
 function list () {
@@ -36,6 +42,7 @@ for (let i = 0; i < 10; i++) {
 }
 
 
-// add('Jackie', 'Coming for Christmas');
+add('Jackie', 'Coming for Christmas');
+add('Jackie', 'And Passover!');
 // console.log(list());
 // console.log('find = ', find({'name': 'Jackie'}));
