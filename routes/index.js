@@ -9,33 +9,35 @@ const client = require('../db/index');
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
-router.get('/', (req, res) => {
-  client.query('SELECT * FROM tweets', function (err, result) {
+router.get('/', (req, res, next) => {
+  client.query('SELECT * FROM tweets INNER JOIN users ON users.id = tweets.user_id',  (err, result)=> {
 	  if (err) return next(err); // pass errors to Express
 	  var tweets = result.rows;
 	  res.render('index', { title: 'Twitter.js', tweets: tweets, showForm: true });
   });
 });
 
-router.get('/users/:name', (req, res) => {
-  const name = req.params.name;
-  let list = tweetBank.find( {name: name} );
-  console.log('name = ', name)
-  res.render( 'index', { tweets: list, name: name, showForm: true, showName: true} );
+router.get('/users/:id', (req, res, next) => {
+  const id = req.params.id;
+  client.query('SELECT * FROM users INNER JOIN tweets ON users.id = tweets.user_id WHERE users.id = $1', [id], (err, result)=> {
+  	if (err) return next(err);
+  	const tweets = result.rows;
+    res.render( 'index', { tweets: tweets, name: tweets[0].name, userId: tweets[0].user_id, showForm: true, showName: true} );
+  });
 });
 
-router.get('/tweets/:id', (req, res) => {
-	const id = req.params.id * 1;
-	let tweet = tweetBank.find({id: id});
-	res.render('index', {tweets: tweet});
+router.get('/tweets/:id', (req, res, next) => {
+	client.query('SELECT content, name, tweets.id, tweets.user_id FROM tweets INNER JOIN users ON users.id = tweets.user_id WHERE tweets.id = $1', [req.params.id * 1], (err, result) => {
+		if (err) return next(err);
+		res.render('index', {tweets: result.rows });
+	});
 });
 
-router.post('/tweets', (req, res) => {
-	const name = req.body.name;
-	const content = req.body.text;
-	const id = tweetBank.add(name, content);
-	//res.redirect('/tweets/' + id);
-	res.redirect('/');
+router.post('/users/:id', (req, res, next) => {
+	client.query('INSERT INTO tweets (user_id, content) VALUES ($1,$2)', [req.params.id, req.body.text], (err,result) => {
+		if (err) return next(err);
+		res.redirect('/');
+	});	
 });
 
 module.exports = router;
