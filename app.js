@@ -6,6 +6,8 @@ const nunjucks = require('nunjucks');
 const router = require('./routes');
 const noCache = process.env.NOCACHE || false;
 
+console.log('noCache  = ', noCache)
+
 app.use(express.static('public'));
 app.set('view engine', 'html');
 app.engine('html', nunjucks.render);
@@ -15,8 +17,8 @@ app.use(volleyball);
 app.use('/', router);
 
 
+const port =  process.env.PORT || 3000
 
 
 
-
-app.listen(3000, () => console.log(chalk.green(`\n*** Server is listening on port ${process.env.PORT} *** \n`)));
+app.listen(port, () => console.log(chalk.green(`\n*** Server is listening on port ${port} *** \n`)));
