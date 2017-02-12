@@ -3,7 +3,7 @@ const app = express();
 const chalk = require('chalk');
 const volleyball = require('volleyball');
 const nunjucks = require('nunjucks');
-const routes = require('./routes');
+const router = require('./routes');
 
 app.use(express.static('public'));
 app.set('view engine', 'html');
@@ -11,7 +11,7 @@ app.engine('html', nunjucks.render);
 nunjucks.configure('views', {noCache: process.env.NOCACHE});
 
 app.use(volleyball);
-app.use('/', routes);
+app.use('/', router);
 
 
 

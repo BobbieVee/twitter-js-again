@@ -18,7 +18,6 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/seed', (req, res, next)=> {
-
 	queries.userQry.forEach((query) => {
 		client.query(query, (err, result) =>{
 			if (err) next(err);
@@ -44,7 +43,6 @@ router.get('/users/:id', (req, res, next) => {
 router.get('/tweets/:id', (req, res, next) => {
 	client.query('SELECT content, name, picture_url, tweets.id, tweets.user_id FROM tweets INNER JOIN users ON users.id = tweets.user_id WHERE tweets.id = $1', [req.params.id * 1], (err, result) => {
 		if (err) return next(err);
-		console.log('tweet get: result.rows:', result.rows)
 		res.render('index', {tweets: result.rows, id: req.params.id * 1});
 	});
 });
