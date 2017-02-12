@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const path = require('path');
 const chalk = require('chalk');
 const volleyball = require('volleyball');
 const nunjucks = require('nunjucks');
@@ -9,6 +10,7 @@ const noCache = process.env.NOCACHE || false;
 console.log('noCache  = ', noCache)
 
 app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'node_modules')));
 app.set('view engine', 'html');
 app.engine('html', nunjucks.render);
 nunjucks.configure('views', {noCache: noCache});
