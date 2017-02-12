@@ -8,12 +8,10 @@ client.connect((err) => {
 		console.log('connect failed');
 		throw err;
 	}
-	console.log(`connected to db: ${db_url}`);
-	
+	console.log(`connected to db: ${db_url}`);	
 
 
 });
 
-// client.query(())
 
 module.exports = client;

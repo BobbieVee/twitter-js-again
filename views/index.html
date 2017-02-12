@@ -29,9 +29,13 @@
         </form>
     {% endif %}
   		<h2>All Tweets</h2>		
+      <form method='get' action='/seed'>
+        <button class='btn btn-warning' style='margin-bottom: 10px'>Seed</button>
+      </form>
   		<ul class='list-group'>
   			{% for tweet in tweets %}
   		    <li class='list-group-item'>
+          <img height= 35px src="{{tweet.picture_url}}" >
   		    <a href="/users/{{tweet.user_id}}"> {{tweet.name}} </a><br>
   		    <a href="/tweets/{{tweet.id}}">{{tweet.content}}<br>
           ID: {{tweet.id}}</a><br>

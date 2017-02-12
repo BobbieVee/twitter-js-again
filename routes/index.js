@@ -3,7 +3,7 @@ const router = express.Router();
 // could use one line instead: const router = require('express').Router();
 const bodyParser = require('body-parser');
 const client = require('../db/index');
-
+const queries =  require('../queries');
 
 
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -15,6 +15,21 @@ router.get('/', (req, res, next) => {
 	  var tweets = result.rows;
 	  res.render('index', { title: 'Twitter.js', tweets: tweets, showForm: true });
   });
+});
+
+router.get('/seed', (req, res, next)=> {
+
+	queries.userQry.forEach((query) => {
+		client.query(query, (err, result) =>{
+			if (err) next(err);
+		});
+	});	
+	queries.tweetQry.forEach((query) => {
+		client.query(query, (err, result) =>{
+			if (err) next(err);
+		});	
+	});
+	res.redirect('/');
 });
 
 router.get('/users/:id', (req, res, next) => {
